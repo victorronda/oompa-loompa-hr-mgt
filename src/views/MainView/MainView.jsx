@@ -6,7 +6,9 @@ import {
   fetchOompaLoompas,
   selectOompaLoompas,
 } from "../../redux/slices/oompaLoompaSlice";
+import MainList from "./MainList/MainList";
 import MainTitle from "./MainTitle/MainTitle";
+import './MainView.css';
 
 const MainView = () => {
   const dispatch = useDispatch();
@@ -19,14 +21,11 @@ const MainView = () => {
   }, [dispatch, oompaLoompas]);
 
   return (
-    <div>
-        <SearchInput />
+    <main className="main-view">
+        <SearchInput items={oompaLoompas} />
         <MainTitle />
-      {oompaLoompas &&
-        oompaLoompas.map((ol) => (
-          <div key={ol.first_name}>{ol.first_name}</div>
-        ))}
-    </div>
+        <MainList items={oompaLoompas} />
+    </main>
   );
 };
 

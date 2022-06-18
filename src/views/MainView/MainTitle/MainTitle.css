@@ -7,11 +7,22 @@
 
 }
 
-/* .main-title h1 {
-
-} */
+.main-title h1 {
+    font-size: 4vw;
+}
 
 .main-title h2 {
     color: var(--gray);
-    margin-top: -2vh;
+    margin-top: -5vh;
+    font-size: 2vw;
+}
+
+@media (max-width:768px) {
+    .main-title h1 {
+        font-size: 7vw;
+    }
+
+    .main-title h2 {
+        font-size: 5vw;
+    }
 }
