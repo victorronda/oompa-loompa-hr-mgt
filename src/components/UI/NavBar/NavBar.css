@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    background: var(--primary-color);
+    gap: 2.5vw;
+    align-items: center;
+    padding-left: 10vw;
+    height: 5vh;
+}
+
+.navbar img {
+    width: 1.8em;
+    height: auto;
+    cursor: pointer;
+}
+
+
+.navbar img:hover {
+    opacity: 0.5;
+}
+
+.navbar-header {
+    font-size: medium;
+}
