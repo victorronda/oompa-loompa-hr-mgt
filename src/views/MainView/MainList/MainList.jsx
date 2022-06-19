@@ -11,6 +11,7 @@ const MainList = ({ items = [] }) => {
         return (
           <MainCard
             key={item.id}
+            id={item.id}
             imgPath={item.image}
             name={name}
             gender={gender}
