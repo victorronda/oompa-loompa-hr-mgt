@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOompaLoompasByPageNumber } from "../../api/oompa-loompa-service";
+import {
+  getOompaLoompaById,
+  getOompaLoompasByPageNumber,
+} from "../../api/oompa-loompa-service";
+import { hasExpired } from "../../utils/date-utils";
 
 const initialOompaLoompaState = {
   oompaLoompas: [],
+  oompaLoompa: {},
   recentOompaLoompas: [],
-  loading: false,
+  isLoading: false,
   error: false,
 };
 
@@ -12,8 +17,8 @@ const oompaLoompaSlice = createSlice({
   name: "oompaLoompas",
   initialState: initialOompaLoompaState,
   reducers: {
-    loading: (state, action) => {
-      state.loading = action.payload;
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload.message;
@@ -21,42 +26,59 @@ const oompaLoompaSlice = createSlice({
     setOompaLoompas: (state, action) => {
       state.oompaLoompas = action.payload;
     },
-    clearOompaLoompasIfNeeded: (state, action) => {
-        console.log('In clearOompaLoompasIfNeeded:', action);
-        const futureDate = new Date('Sat, 18 Jun 2022 10:24:10 GMT');
-        const now = new Date();
-        console.log('futureDate:', futureDate);
-        console.log('now:', now);
-        if (futureDate.getTime() > now.getTime()) {
-            console.log('Future');
-        } else {
-            console.log('Now');
-        }
-
-
-      state.oompaLoompas = action.payload;
+    setOompaLoompa: (state, action) => {
+      state.oompaLoompa = action.payload;
     },
   },
 });
 
-const { loading, setError, setOompaLoompas, clearOompaLoompasIfNeeded } = oompaLoompaSlice.actions;
+const { setIsLoading, setError, setOompaLoompas, setOompaLoompa } =
+  oompaLoompaSlice.actions;
 
-export const fetchOompaLoompas = (pageNumber) => async (dispatch) => {
-  dispatch(loading(true));
+const fetchOompaLoompasForFirstTime = (pageNumber) => async (dispatch) => {
+  dispatch(setIsLoading(true));
   try {
     const oompaLoompas = await getOompaLoompasByPageNumber(pageNumber);
-    console.log(`This is Oompa Loompas on page ${pageNumber}`, oompaLoompas);
-    dispatch(clearOompaLoompasIfNeeded(oompaLoompas))
+    localStorage.setItem("oompaLoompas", JSON.stringify(oompaLoompas));
     dispatch(setOompaLoompas(oompaLoompas));
-    dispatch(loading(false));
+    dispatch(setIsLoading(false));
   } catch (error) {
-    dispatch(loading(false));
+    dispatch(setIsLoading(false));
+    dispatch(setError(error));
+  }
+};
+
+export const fetchOompaLoompas = (pageNumber) => async (dispatch) => {
+  const cachedOompaLoompas = localStorage.getItem("oompaLoompas");
+  if (cachedOompaLoompas) {
+    const oompaLoompas = JSON.parse(cachedOompaLoompas);
+    const expired = hasExpired(oompaLoompas.expires);
+    if (expired) {
+      fetchOompaLoompasForFirstTime();
+    } else {
+      dispatch(setOompaLoompas(oompaLoompas));
+    }
+  } else {
+    fetchOompaLoompasForFirstTime();
+  }
+};
+
+export const fetchOompaLoompaById = (oompaLoompaId) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+  dispatch(setOompaLoompa({}));
+  try {
+    const oompaLoompa = await getOompaLoompaById(oompaLoompaId);
+    dispatch(setOompaLoompa(oompaLoompa));
+    dispatch(setIsLoading(false));
+  } catch (error) {
+    dispatch(setIsLoading(false));
     dispatch(setError(error));
   }
 };
 
 export const selectOompaLoompas = (state) => state.oompaLoompas.oompaLoompas;
-export const selectLoading = (state) => state.oompaLoompas.loading;
+export const selectOompaLoompa = (state) => state.oompaLoompas.oompaLoompa;
+export const selectIsLoading = (state) => state.oompaLoompas.isLoading;
 export const selectError = (state) => state.oompaLoompas.error;
 
 export default oompaLoompaSlice.reducer;

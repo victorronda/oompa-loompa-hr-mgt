@@ -1,0 +1,15 @@
+.detail-view {
+    margin: 8vw;
+}
+
+@media (max-width: 768px) {
+    .detail-view {
+        margin-top: 15vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .detail-view {
+        margin-top: 12vh;
+    }
+}

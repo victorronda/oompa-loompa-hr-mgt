@@ -1,6 +1,14 @@
-export const getExpirationDate = (expDays) => {
+export const setExpirationDate = (expDays) => {
     const date = new Date();
-    console.log('This is date:', date);
     date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
     return date.toUTCString();
+}
+
+export const hasExpired = (expDate) => {
+    const date = new Date();
+    const expirationDate = new Date(expDate);
+    if(date.getTime() > expirationDate.getTime()) {
+        return true;
+    }
+    return false;
 }

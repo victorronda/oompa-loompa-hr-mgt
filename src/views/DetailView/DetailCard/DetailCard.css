@@ -1,0 +1,42 @@
+.detail-card {
+    width: 85vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+}
+.detail-card-image {
+    width: 50%;
+}
+
+.detail-card-image img {
+    width: 100%;
+    height: auto;
+}
+
+.detail-card-specs {
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .detail-card {
+        flex-direction: column;
+    }
+
+    .detail-card-image {
+        width: 100%;
+    }
+
+    .detail-card-specs {
+        width: 100%;
+        font-size: 3vw;
+    }
+}
+
+@media (max-width: 576px) {
+    .detail-card-specs {
+        font-size: 4vw;
+    }
+}

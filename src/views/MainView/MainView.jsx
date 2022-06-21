@@ -8,7 +8,7 @@ import {
 } from "../../redux/slices/oompaLoompaSlice";
 import MainList from "./MainList/MainList";
 import MainTitle from "./MainTitle/MainTitle";
-import './MainView.css';
+import "./MainView.css";
 
 const MainView = () => {
   const dispatch = useDispatch();
@@ -17,14 +17,16 @@ const MainView = () => {
   useEffect(() => {
     if (!oompaLoompas) {
       dispatch(fetchOompaLoompas(1));
+    } else {
+      return;
     }
   }, [dispatch, oompaLoompas]);
 
   return (
     <main className="main-view">
-        <SearchInput items={oompaLoompas} />
-        <MainTitle />
-        <MainList items={oompaLoompas} />
+      <SearchInput items={oompaLoompas} />
+      <MainTitle />
+      <MainList items={oompaLoompas} />
     </main>
   );
 };
