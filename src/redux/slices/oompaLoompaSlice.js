@@ -49,17 +49,18 @@ const fetchOompaLoompasForFirstTime = (pageNumber) => async (dispatch) => {
 };
 
 export const fetchOompaLoompas = (pageNumber) => async (dispatch) => {
-  const cachedOompaLoompas = localStorage.getItem("oompaLoompas");
-  if (cachedOompaLoompas) {
-    const oompaLoompas = JSON.parse(cachedOompaLoompas);
+  const storedOompaLoompas = localStorage.getItem("oompaLoompas");
+  if (storedOompaLoompas) {
+    const oompaLoompas = JSON.parse(storedOompaLoompas);
     const expired = hasExpired(oompaLoompas.expires);
     if (expired) {
-      fetchOompaLoompasForFirstTime();
+      localStorage.removeItem('oompaLoompas');
+      dispatch(fetchOompaLoompasForFirstTime());
     } else {
       dispatch(setOompaLoompas(oompaLoompas));
     }
   } else {
-    fetchOompaLoompasForFirstTime();
+    dispatch(fetchOompaLoompasForFirstTime());
   }
 };
 

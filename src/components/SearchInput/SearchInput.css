@@ -1,7 +1,6 @@
 .search-input-container {
     position: relative;
     width: 100vw;
-    margin-left: 78vw;
     margin-top: 2.5vh;
     margin-bottom: 3vh;
 }
@@ -13,6 +12,7 @@
     border-radius: 5px;
     padding-left: 0.5vw;
     font-size: 1.2vw;
+    margin-left: 68.4vw;
 }
 
 .search-icon {
@@ -22,7 +22,7 @@
     top: 28%;
     border-left: 1px solid var(--primary-color);
     padding-left: 0.5vw;
-    margin-right: 1.2vw;
+    margin-left: 68.4vw;
 }
 
 @media (max-width: 768px) {
